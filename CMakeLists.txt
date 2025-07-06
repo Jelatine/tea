@@ -1,0 +1,147 @@
+cmake_minimum_required(VERSION 3.31)
+project(untitled)
+
+set(CMAKE_CXX_STANDARD 17)
+
+
+add_executable(untitled main.cpp)
+install(TARGETS untitled
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+)
+
+# 基本信息
+set(CPACK_PACKAGE_NAME "MyApplication")
+set(CPACK_SYSTEM_NAME  "win64")
+set(CPACK_PACKAGE_VENDOR "Your Company")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "一个示例应用程序")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+
+# 联系信息
+set(CPACK_PACKAGE_CONTACT "support@yourcompany.com")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://www.yourcompany.com")
+
+# 许可证
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE.txt")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
+
+# 包文件名
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_NAME}")
+
+## 包组件
+#set(CPACK_COMPONENTS_ALL Runtime Libraries Development Documentation)
+#
+## 组件描述
+#set(CPACK_COMPONENT_RUNTIME_DISPLAY_NAME "应用程序")
+#set(CPACK_COMPONENT_RUNTIME_DESCRIPTION "主要的可执行文件")
+#set(CPACK_COMPONENT_RUNTIME_REQUIRED ON)
+#
+#set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "运行时库")
+#set(CPACK_COMPONENT_LIBRARIES_DESCRIPTION "应用程序运行所需的库文件")
+#set(CPACK_COMPONENT_LIBRARIES_REQUIRED ON)
+#
+#set(CPACK_COMPONENT_DEVELOPMENT_DISPLAY_NAME "开发文件")
+#set(CPACK_COMPONENT_DEVELOPMENT_DESCRIPTION "头文件和开发库")
+#set(CPACK_COMPONENT_DEVELOPMENT_DEPENDS Libraries)
+#
+#set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "文档")
+#set(CPACK_COMPONENT_DOCUMENTATION_DESCRIPTION "用户手册和API文档")
+
+# ==================================================================================
+
+# 设置NSIS为默认生成器
+set(CPACK_GENERATOR "NSIS")
+
+# NSIS基本配置
+set(CPACK_NSIS_PACKAGE_NAME "${CPACK_PACKAGE_NAME}")
+set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME} v${CPACK_PACKAGE_VERSION}")
+set(CPACK_NSIS_HELP_LINK "${CPACK_PACKAGE_HOMEPAGE_URL}")
+set(CPACK_NSIS_URL_INFO_ABOUT "${CPACK_PACKAGE_HOMEPAGE_URL}")
+set(CPACK_NSIS_CONTACT "${CPACK_PACKAGE_CONTACT}")
+
+# 安装目录
+set(CPACK_NSIS_INSTALL_ROOT "$PROFILE")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_NAME}123")
+
+set(CPACK_NSIS_BRANDING_TEXT "https://github.com/Jelatine/JellyCAD")
+
+# 图标和品牌
+set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/resources/favicon.ico")
+#set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/resources/uninstaller.ico")
+set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\untitled.exe")
+
+# 许可证页面
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+
+# 开始菜单
+set(CPACK_NSIS_CREATE_ICONS_EXTRA
+        "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${CPACK_PACKAGE_NAME}.lnk' '$INSTDIR\\\\bin\\\\untitled.exe'"
+)
+set(CPACK_NSIS_DELETE_ICONS_EXTRA
+        "Delete '$SMPROGRAMS\\\\$START_MENU\\\\${CPACK_PACKAGE_NAME}.lnk'"
+)
+
+# 桌面快捷方式
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
+        "CreateShortCut '$DESKTOP\\\\${CPACK_PACKAGE_NAME}.lnk' '$INSTDIR\\\\bin\\\\untitled.exe'"
+)
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
+        "Delete '$DESKTOP\\\\${CPACK_PACKAGE_NAME}.lnk'"
+)
+
+# 注册表项
+set(CPACK_NSIS_MODIFY_PATH ON)
+
+# 自定义页面
+set(CPACK_NSIS_WELCOME_TITLE "欢迎使用 ${CPACK_PACKAGE_NAME} 安装向导")
+set(CPACK_NSIS_WELCOME_TITLE_3LINES ON)
+set(CPACK_NSIS_FINISH_TITLE "完成 ${CPACK_PACKAGE_NAME} 安装")
+set(CPACK_NSIS_FINISH_TITLE_3LINES ON)
+
+# 多语言支持
+set(CPACK_NSIS_INSTALLER_MUI_FINISHPAGE_RUN "untitled.exe")
+
+# 压缩选项
+set(CPACK_NSIS_COMPRESSOR "/SOLID lzma")
+
+# 额外的NSIS命令
+set(CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS
+        "
+        ; 检查是否已安装旧版本
+        ReadRegStr $R0 HKLM 'Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Uninstall\\\\${CPACK_PACKAGE_NAME}' 'UninstallString'
+        StrCmp $R0 '' done
+
+        MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION '检测到已安装 ${CPACK_PACKAGE_NAME}。需要先卸载旧版本。' IDOK uninst
+        Abort
+
+        uninst:
+        ClearErrors
+        ExecWait '$R0 _?=$INSTDIR'
+
+        done:
+        "
+)
+
+# 组件安装类型
+#set(CPACK_NSIS_INSTALLATION_TYPES "完整安装;自定义安装;最小安装")
+
+# 组件分组
+#
+
+# 将组件分配到组
+#set(CPACK_COMPONENT_RUNTIME_GROUP "Core")
+#set(CPACK_COMPONENT_LIBRARIES_GROUP "Core")
+#set(CPACK_COMPONENT_DEVELOPMENT_GROUP "Optional")
+#set(CPACK_COMPONENT_DOCUMENTATION_GROUP "Optional")
+
+# 安装类型配置
+#set(CPACK_COMPONENT_RUNTIME_INSTALL_TYPES "完整安装;自定义安装;最小安装")
+#set(CPACK_COMPONENT_LIBRARIES_INSTALL_TYPES "完整安装;自定义安装;最小安装")
+#set(CPACK_COMPONENT_DEVELOPMENT_INSTALL_TYPES "完整安装;自定义安装")
+#set(CPACK_COMPONENT_DOCUMENTATION_INSTALL_TYPES "完整安装;自定义安装")
+
+include(CPack)
