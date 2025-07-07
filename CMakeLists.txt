@@ -3,8 +3,11 @@ project(untitled)
 
 set(CMAKE_CXX_STANDARD 17)
 
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
+
 
 add_executable(untitled main.cpp)
+target_link_libraries(untitled Qt5::Widgets)
 install(TARGETS untitled
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib

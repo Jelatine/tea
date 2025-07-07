@@ -1,3 +1,25 @@
+#include <QApplication>
+#include <QWidget>
+
+int main(int argc, char *argv[])
+{
+    // 创建 QApplication 实例，处理应用程序的初始化和事件循环
+    QApplication app(argc, argv);
+
+    // 创建一个 QWidget 作为主窗口
+    QWidget window;
+
+    // 设置窗口标题
+    window.setWindowTitle("Simple Qt5 Application");
+
+    // 显示窗口
+    window.show();
+
+    // 进入应用程序的主事件循环，等待用户操作
+    return app.exec();
+}
+
+#if 0
 #include <iostream>
 
 // TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -14,3 +36,4 @@ int main() {
     return 0;
     // TIP See CLion help at <a href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>. Also, you can try interactive lessons for CLion by selecting 'Help | Learn IDE Features' from the main menu.
 }
+#endif
