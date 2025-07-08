@@ -8,15 +8,31 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 add_executable(untitled main.cpp)
 target_link_libraries(untitled Qt5::Widgets)
-install(TARGETS untitled
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib
+install(TARGETS untitled DESTINATION ./)
+get_target_property(QT_QMAKE_EXECUTABLE Qt5::qmake IMPORTED_LOCATION)
+get_filename_component(QT_BIN_DIR ${QT_QMAKE_EXECUTABLE} DIRECTORY)
+install(DIRECTORY ${QT_BIN_DIR}/plugins DESTINATION ./)
+
+install(CODE [[
+file(GET_RUNTIME_DEPENDENCIES
+    RESOLVED_DEPENDENCIES_VAR RESOLVED_DEPS
+    UNRESOLVED_DEPENDENCIES_VAR UNRESOLVED_DEPS
+    LIBRARIES $<TARGET_FILE:untitled>
+    DIRECTORIES $<TARGET_FILE_DIR:untitled>
+    PRE_INCLUDE_REGEXES $<TARGET_FILE_DIR:untitled>
+    PRE_EXCLUDE_REGEXES "system32"
+    POST_INCLUDE_REGEXES $<TARGET_FILE_DIR:untitled>
+    POST_EXCLUDE_REGEXES "system32"
+)
+foreach(DEP_LIB ${RESOLVED_DEPS})
+    file(INSTALL ${DEP_LIB} DESTINATION ${CMAKE_INSTALL_PREFIX}/)
+endforeach()
+]]
 )
 
 # 基本信息
 set(CPACK_PACKAGE_NAME "MyApplication")
-set(CPACK_SYSTEM_NAME  "win64")
+set(CPACK_SYSTEM_NAME "win64")
 set(CPACK_PACKAGE_VENDOR "Your Company")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "一个示例应用程序")
 set(CPACK_PACKAGE_VERSION 1.3.3)
@@ -77,14 +93,14 @@ set(CPACK_NSIS_BRANDING_TEXT "https://github.com/Jelatine/JellyCAD")
 # 图标和品牌
 set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/resources/favicon.ico")
 #set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/resources/uninstaller.ico")
-set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\untitled.exe")
+set(CPACK_NSIS_INSTALLED_ICON_NAME "untitled.exe")
 
 # 许可证页面
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 
 # 开始菜单
 set(CPACK_NSIS_CREATE_ICONS_EXTRA
-        "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${CPACK_PACKAGE_NAME}.lnk' '$INSTDIR\\\\bin\\\\untitled.exe'"
+        "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${CPACK_PACKAGE_NAME}.lnk' '$INSTDIR\\\\untitled.exe'"
 )
 set(CPACK_NSIS_DELETE_ICONS_EXTRA
         "Delete '$SMPROGRAMS\\\\$START_MENU\\\\${CPACK_PACKAGE_NAME}.lnk'"
@@ -92,7 +108,7 @@ set(CPACK_NSIS_DELETE_ICONS_EXTRA
 
 # 桌面快捷方式
 set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
-        "CreateShortCut '$DESKTOP\\\\${CPACK_PACKAGE_NAME}.lnk' '$INSTDIR\\\\bin\\\\untitled.exe'"
+        "CreateShortCut '$DESKTOP\\\\${CPACK_PACKAGE_NAME}.lnk' '$INSTDIR\\\\untitled.exe'"
 )
 set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS
         "Delete '$DESKTOP\\\\${CPACK_PACKAGE_NAME}.lnk'"
