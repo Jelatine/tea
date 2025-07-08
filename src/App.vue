@@ -3,5 +3,6 @@
 
 <template>
 hello my friend
+  version2
 </template>
 
