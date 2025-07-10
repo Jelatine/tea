@@ -5,6 +5,11 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
+find_package(GTest CONFIG QUIET)
+if (GTest_FOUND)
+    enable_testing()
+    message(STATUS "==== gtest")
+endif ()
 
 add_executable(untitled main.cpp)
 target_link_libraries(untitled Qt5::Widgets)
