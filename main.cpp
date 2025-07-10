@@ -1,3 +1,10 @@
+#if 1
+#include <iostream>
+int main(){
+  std::cout << "demo" << std::endl;
+}
+
+#elif 0
 #include <QApplication>
 #include <QWidget>
 
@@ -19,7 +26,7 @@ int main(int argc, char *argv[])
     return app.exec();
 }
 
-#if 0
+#elif 0
 #include <iostream>
 
 // TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
