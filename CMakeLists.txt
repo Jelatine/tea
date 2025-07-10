@@ -3,7 +3,7 @@ project(untitled)
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+#find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
 find_package(GTest CONFIG QUIET)
 if (GTest_FOUND)
@@ -12,11 +12,11 @@ if (GTest_FOUND)
 endif ()
 
 add_executable(untitled main.cpp)
-target_link_libraries(untitled Qt5::Widgets)
+#target_link_libraries(untitled Qt5::Widgets)
 install(TARGETS untitled DESTINATION ./)
-get_target_property(QT_QMAKE_EXECUTABLE Qt5::qmake IMPORTED_LOCATION)
-get_filename_component(QT_BIN_DIR ${QT_QMAKE_EXECUTABLE} DIRECTORY)
-install(DIRECTORY ${QT_BIN_DIR}/plugins DESTINATION ./)
+#get_target_property(QT_QMAKE_EXECUTABLE Qt5::qmake IMPORTED_LOCATION)
+#get_filename_component(QT_BIN_DIR ${QT_QMAKE_EXECUTABLE} DIRECTORY)
+#install(DIRECTORY ${QT_BIN_DIR}/plugins DESTINATION ./)
 
 install(CODE [[
 file(GET_RUNTIME_DEPENDENCIES
