@@ -26,7 +26,7 @@ jobs:
       - name: Build 🏗️
         run: |
           cd docs
-          npm ci
+          npm install
           npm run docs:build
 
       - name: Deploy to GitHub Pages 🚀
