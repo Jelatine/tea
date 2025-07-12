@@ -4,8 +4,10 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Tea Project",
   description: "A VitePress Site",
+  base: '/tea/', 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    logo: '/image.jpeg',
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Examples', link: '/markdown-examples' }
