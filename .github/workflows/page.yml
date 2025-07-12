@@ -20,17 +20,20 @@ jobs:
           node-version: '22.x'
           cache: 'npm'
 
-      - name: Install dependencies 📦
-        run: npm ci
+      # - name: Install dependencies 📦
+      #   run: npm ci
 
       - name: Build 🏗️
-        run: npm run build
+        run: |
+          cd docs
+          npm ci
+          npm run docs:build
 
       - name: Deploy to GitHub Pages 🚀
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/master'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./docs/.vitepress/dist
           # 可选：自定义域名
           # cname: your-domain.com
